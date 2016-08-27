@@ -6,9 +6,10 @@
 #include "keyboard.hpp"
 
 #include "sprite.hpp"
-#include "sprite.cpp"
+// #include "sprite.cpp"
 
 #include "engine.hpp"
+#include "game_object.hpp"
 
 
 class LD36Game : public IGame {
