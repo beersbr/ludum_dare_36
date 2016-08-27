@@ -5,56 +5,20 @@
 #include "keyboard.hpp"
 #include "keyboard.cpp"
 
+#include "engine.hpp"
+#include "engine.cpp"
+
 #ifdef _WIN32
 #include <GL/glew.h>
 #endif
 
 
+LD36Engine* Engine;
+
 int main(int argc, char* argv[]) {
 
-	if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		std::cout << "Could not initialize SDL" << std::endl;
-		return INITIALIZATION_ERROR;
-	}
-
-
-	if(!IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG|IMG_INIT_TIF)) {
-		std::cout << "Could not initialize sdl image" << std::endl;
-		return INITIALIZATION_ERROR;
-	}
-
-
-	SDL_Window *mainWindow = SDL_CreateWindow(EXE_NAME, 
-	                                          SDL_WINDOWPOS_CENTERED,
-	                                          SDL_WINDOWPOS_CENTERED,
-	                                          WINDOW_WIDTH,
-	                                          WINDOW_HEIGHT,
-	                                          SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-
-	if(!mainWindow) {
-		std::cout << "Could not create main window" << std::endl;
-	}
-
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GLContext mainContext = SDL_GL_CreateContext(mainWindow);
-
-	#ifdef _WIN32
-	GLenum err = glewInit();
-	#endif
-
-	if(!mainContext){
-		std::cout << "Could not init gl" << std::endl;
-	}
-
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-
-	SDL_GL_SetSwapInterval(1);
-
+	Engine = new LD36Engine();
+	Engine->Initialize(WINDOW_WIDTH, WINDOW_HEIGHT, EXE_NAME);
 
 	spriteSheet_t sheet1 = loadSpriteSheet("images/sheet1.png");
 
@@ -142,6 +106,7 @@ int main(int argc, char* argv[]) {
 
 
 		if(Keyboard::Instance()->KeyIsDown(SDLK_UP)) {
+			// 
 			sprite.position.y += 100.f * elapsedSeconds;
 		}
 		if(Keyboard::Instance()->KeyIsDown(SDLK_DOWN)) {
@@ -154,11 +119,11 @@ int main(int argc, char* argv[]) {
 			sprite.position.x += 100.f * elapsedSeconds;
 		}
 
-		
 
 
 
-		SDL_GL_SwapWindow(mainWindow);
+
+		SDL_GL_SwapWindow(Engine->window);
 
 		frames += 1;
 		Keyboard::Instance()->ClearKeyPressedStates();
