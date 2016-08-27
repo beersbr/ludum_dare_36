@@ -27,6 +27,7 @@ int main(int argc, char* argv[]) {
 	Engine->game->Preload();
 
 	shader_t spriteShader = loadShader("shaders/sprite.vertex.glsl", "shaders/sprite.fragment.glsl", "sprite");
+	glUseProgram(spriteShader.id);
 
 	SDL_Event event = {};
 	while(Engine->IsRunning()) {

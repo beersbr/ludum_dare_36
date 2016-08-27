@@ -126,6 +126,8 @@ void Mesh::Initialize(const vertex_t * const verts, const int vertices_sz) {
 		#endif
 	}
 
+	renderMode = GL_TRIANGLES;
+
 	verticesSz = vertices_sz;
 	vertices = (vertex_t*)malloc(sizeof(vertex_t) * verticesSz);
 	memcpy((void*)vertices, verts, verticesSz);
@@ -148,14 +150,50 @@ void Mesh::Initialize(const vertex_t * const verts, const int vertices_sz) {
 }
 
 
+void Mesh::SetRenderMode(GLuint mode) {
+	renderMode = mode;
+}
+
+
 //*******************************************************************************************************************
 // SPRITE
 //*******************************************************************************************************************
 
 long Sprite::ids = 0;
 
+std::unordered_map<std::string, Sprite*> Sprite::pool;
+
 Sprite::Sprite() {
 	id = ++Sprite::ids;
+	valid = false;
+}
+
+
+void Sprite::Initialize(Mesh * const mesh,
+                        Texture * const texture,
+                        const int frame_columns,
+                        const int frame_rows,
+                        const int frame_width,
+                        const int frame_height,
+                        const int total_frames,
+                        const int frame_anim_time ) {
+
+	this->mesh    = mesh;
+	this->texture = texture;
+
+	frameColumns      = frame_columns;
+	frameRows         = frame_rows;
+	currentFrame      = 0;
+	totalFrames       = total_frames;
+	frameMilliseconds = frame_anim_time;
+
+	direction = SPRITE_DIRECTION_RIGHT;
+
+	position = glm::vec3(0.0f, 0.0f, 0.0f);
+	scale    = glm::vec3(1.0f, 1.0f, 1.0f);
+	rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	valid = true;
 }
 
 

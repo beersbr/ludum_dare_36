@@ -66,11 +66,13 @@ public:
 
 	void Use() const; 
 	void Initialize( const vertex_t * const vertices, const int vertices_sz );
+	void SetRenderMode(GLuint mode);
 
 public:	
 	long id;
 	GLuint vaoId;
 	GLuint vboId;
+	GLuint renderMode; // NOTE(Brett): GL_TRIANGLES...
 
 	vertex_t *vertices;
 	int verticesSz;
@@ -88,10 +90,22 @@ private:
 // SPRITE
 //*******************************************************************************************************************
 
+enum sprite_direction_t {
+	SPRITE_NO_DIRECTION = 0,
+	SPRITE_DIRECTION_LEFT,
+	SPRITE_DIRECTION_RIGHT,
+	SPRITE_DIRECTION_COUNT
+};
+
 
 class Sprite {
 public:
 	Sprite();
+
+	void Initialize(Mesh * const mesh, Texture * const texture,
+	                const int frame_columns, const int frame_rows,
+	                const int frame_width, const int frame_height,
+	                const int total_frames, const int frame_anim_time );
 
 	void Render() const;
 
@@ -104,16 +118,17 @@ public:
 	Timer frameTimer;
 	int frameMilliseconds;
 
-	long id;
-	int  direction;
-
+	long  id;
+	bool  valid;
 	float width;
 	float height;
 
-	int frameCols;
-	int frameRows;
-	int currentFrame;
-	int totalFrames;
+	int   frameColumns;
+	int   frameRows;
+	int   currentFrame;
+	int   totalFrames;
+
+	sprite_direction_t direction;
 
 	Mesh*    mesh;
 	Texture* texture;
@@ -125,6 +140,9 @@ public:
 	glm::mat4 uv;
 
 	std::string name;
+
+private:
+	static std::unordered_map<std::string, Sprite*> pool;
 };
 
 #endif
