@@ -103,15 +103,15 @@ public:
 	Sprite();
 
 	static Sprite * CreateSprite(const std::string name, 
-	                             Mesh * const mesh, Texture * const texture,
-	                		     const int frame_columns, const int frame_rows,
-	                             const int frame_width, const int frame_height,
-	                			 const int total_frames, const int frame_anim_time);
+								 Mesh * const mesh, Texture * const texture,
+								 const int frame_columns, const int frame_rows,
+								 const int frame_width, const int frame_height,
+								 const int total_frames, const int frame_anim_time);
 
 	void Initialize(Mesh * const mesh, Texture * const texture,
-	                const int frame_columns, const int frame_rows,
-	                const int frame_width, const int frame_height,
-	                const int total_frames, const int frame_anim_time );
+					const int frame_columns, const int frame_rows,
+					const int frame_width, const int frame_height,
+					const int total_frames, const int frame_anim_time );
 
 	void Render() const;
 

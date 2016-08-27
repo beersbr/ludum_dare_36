@@ -224,7 +224,7 @@ void Sprite::Initialize(Mesh * const mesh,
 
 
 void Sprite::Render() const {
-
+	
 }
 
 
