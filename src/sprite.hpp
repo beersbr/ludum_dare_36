@@ -44,7 +44,8 @@ public:
 	static std::unordered_map<std::string, Texture*> pool;
 
 	SDL_Surface* pixels;
-	glm::vec2    size;
+	long 		 width;
+	long 		 height;
 	GLuint       rsId;
 	long         id;
 	bool         loaded;
@@ -113,7 +114,7 @@ public:
 					const int frame_width, const int frame_height,
 					const int total_frames, const int frame_anim_time );
 
-	void Render() const;
+	void Render(const shader_t * const shader, glm::mat4 *p, glm::mat4 *v) const;
 
 	void StepFrame();
 	void SetFrame(const int frame);
@@ -126,8 +127,8 @@ public:
 
 	long  id;
 	bool  valid;
-	float width;
-	float height;
+	float frameWidth;
+	float frameHeight;
 
 	int   frameColumns;
 	int   frameRows;

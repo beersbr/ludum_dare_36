@@ -57,7 +57,8 @@ void Texture::Load(const char * const filename) {
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	size   = glm::vec2(pixels->w, pixels->h);
+	width  = pixels->w;
+	height = pixels->h;
 	loaded = true;
 }
 
@@ -65,7 +66,7 @@ void Texture::Load(const char * const filename) {
 void Texture::Use() const {
 	if(rsId != currentRsId) {
 		currentRsId = rsId;
-		// glActiveTexture(GL_TEXTURE0+currentTextureUnit);
+		glActiveTexture(GL_TEXTURE0+currentTextureUnit);
 		glBindTexture(GL_TEXTURE_2D, rsId);
 	}
 }
@@ -76,7 +77,7 @@ void Texture::Use() const {
 //*******************************************************************************************************************
 
 long Mesh::ids          = 0;
-long Mesh::currentId    = 0;
+long Mesh::currentId    = -1;
 std::unordered_map<std::string, Mesh*> Mesh::pool;
 
 
@@ -102,7 +103,13 @@ Mesh::~Mesh() {
 
 void Mesh::Use() const {
 	if(Mesh::currentId != id) {
+		#ifdef DEBUG
+		std::cout << "binding vao: " << id << std::endl;
+		#endif
+
 		currentId = id;
+		glBindVertexArray(vaoId);
+		// glBindBuffer(GL_ARRAY_BUFFER, vboId);
 	}
 }
 
@@ -130,7 +137,7 @@ void Mesh::Initialize(const vertex_t * const verts, const int vertices_sz) {
 
 	verticesSz = vertices_sz;
 	vertices = (vertex_t*)malloc(sizeof(vertex_t) * verticesSz);
-	memcpy((void*)vertices, verts, verticesSz);
+	memcpy((void*)vertices, verts, verticesSz * sizeof(vertex_t));
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
 
@@ -207,6 +214,8 @@ void Sprite::Initialize(Mesh * const mesh,
 	this->mesh    = mesh;
 	this->texture = texture;
 
+	frameWidth        = texture->width/(float)frame_columns;
+	frameHeight       = texture->height/(float)frame_rows; 
 	frameColumns      = frame_columns;
 	frameRows         = frame_rows;
 	currentFrame      = 0;
@@ -223,8 +232,37 @@ void Sprite::Initialize(Mesh * const mesh,
 }
 
 
-void Sprite::Render() const {
-	
+void Sprite::Render(const shader_t * const shader, glm::mat4 *p, glm::mat4 *v) const {
+	mesh->Use();
+	glUseProgram(shader->id);
+
+	texture->Use();
+
+	glm::mat4 model = glm::mat4();
+	model           = glm::translate(model, position);
+	model           = glm::scale(model, scale);
+
+	glm::mat4 uvmodel = glm::mat4();
+	uvmodel = glm::scale(uvmodel, 
+	                     glm::vec3(frameWidth/(float)texture->width,
+	                               frameHeight/(float)texture->height,
+	                               1.0f)
+	);
+
+	GLint sampler0UniformLocation   = glGetUniformLocation(shader->id, "sampler0");
+	GLint modelUniformLocation      = glGetUniformLocation(shader->id, "model");
+	GLint uvmodelUniformLocation    = glGetUniformLocation(shader->id, "uvmodel");
+	GLint projectionUniformLocation = glGetUniformLocation(shader->id, "projection");
+	GLint viewUniformLocation       = glGetUniformLocation(shader->id, "view");
+
+	glUniformMatrix4fv(projectionUniformLocation, 1, GL_FALSE, (GLfloat*)p);
+	glUniformMatrix4fv(viewUniformLocation,       1, GL_FALSE, (GLfloat*)v);
+
+	glUniform1i(sampler0UniformLocation,       texture->currentTextureUnit);
+	glUniformMatrix4fv(modelUniformLocation,   1, GL_FALSE, (GLfloat*)&model[0]);
+	glUniformMatrix4fv(uvmodelUniformLocation, 1, GL_FALSE, (GLfloat*)&uvmodel[0]);
+
+	glDrawArrays(GL_TRIANGLES, 0, mesh->verticesSz);
 }
 
 

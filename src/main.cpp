@@ -14,7 +14,6 @@
 #include <GL/glew.h>
 #endif
 
-
 LD36Engine* Engine;
 
 int main(int argc, char* argv[]) {
@@ -61,8 +60,6 @@ int main(int argc, char* argv[]) {
 		}
 
 		Engine->Update();
-
-		SDL_GL_SwapWindow(Engine->window);
 
 		Keyboard::Instance()->ClearKeyPressedStates();
 	}

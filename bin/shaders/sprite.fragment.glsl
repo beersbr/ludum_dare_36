@@ -9,6 +9,8 @@ in vec2 fg_uv;
 out vec4 final_color;
 
 void main(void) {
-	final_color = fg_color * texture(sampler0, vec2(uvmodel * vec4(fg_uv, 0.0, 1.0)));
+	vec4 position = uvmodel * vec4(fg_uv, 0.0, 1.0);
+	vec4 image_color = texture(sampler0, vec2(position.xy));
+	final_color = fg_color * image_color;
 }
 

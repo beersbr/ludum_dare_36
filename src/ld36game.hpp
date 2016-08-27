@@ -23,6 +23,7 @@ public:
 	glm::mat4 viewMatrix;
 
 	shader_t shader;
+	Sprite *sprite;
 
 };
 

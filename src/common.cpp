@@ -40,8 +40,8 @@ shader_t loadShader(const char * const vertex_name, const char * const fragment_
 	char *fragmentData = loadBinaryFile(fragment_name);
 
 	#ifdef DEBUG
-	std::cout << ">> read vertex " << vertex_name << std::endl << vertexData <<std::endl;
-	std::cout << ">> read fragment " << fragment_name << std::endl << fragmentData <<std::endl;
+	// std::cout << ">> read vertex " << vertex_name << std::endl << vertexData <<std::endl;
+	// std::cout << ">> read fragment " << fragment_name << std::endl << fragmentData <<std::endl;
 	#endif
 
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);

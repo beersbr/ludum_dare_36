@@ -62,6 +62,8 @@ void LD36Engine::Initialize(const int window_width, const int window_height, con
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	SDL_GL_SetSwapInterval(1);
 
@@ -98,7 +100,9 @@ void LD36Engine::Update() {
 			realFrameCount = 0;
 		}
 
-		game->Render();		
+		game->Render();	
+
+		SDL_GL_SwapWindow(window);
 	}
 
 }
