@@ -2,7 +2,11 @@
 #define _LD_LD36GAME_
 
 #include "igame.hpp"
-#include "igame.cpp"
+
+#include "keyboard.hpp"
+
+#include "sprite.hpp"
+#include "sprite.cpp"
 
 class LD36Game : public IGame {
 public:

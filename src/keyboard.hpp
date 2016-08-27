@@ -1,6 +1,11 @@
 #ifndef _LD_KEYBOARD_
 #define _LD_KEYBOARD_
 
+#include <SDL2/SDL.h>
+#include <iostream>
+#include <cstdlib>
+#include <unordered_map>
+
 class Keyboard {
 public:
 	static Keyboard * const Instance();
@@ -14,6 +19,8 @@ public:
 	bool   KeyWasPressed(SDL_Keycode code);
 
 private:
+	Keyboard();
+
 	static Keyboard *instance;
 
 	std::unordered_map<SDL_Keycode, bool> keyStates;

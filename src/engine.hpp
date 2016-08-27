@@ -24,10 +24,7 @@
 #endif
 
 #include "igame.hpp"
-#include "igame.cpp"
-
 #include "timer.hpp"
-#include "timer.cpp"
 
 class LD36Engine {
 public:
