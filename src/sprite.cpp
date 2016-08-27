@@ -247,7 +247,17 @@ void Sprite::Render(const shader_t * const shader, glm::mat4 *p, glm::mat4 *v) c
 	                     glm::vec3(frameWidth/(float)texture->width,
 	                               frameHeight/(float)texture->height,
 	                               1.0f)
-	);
+	                     );
+
+	int frameX = currentFrame % frameColumns;
+	int frameY = currentFrame / frameColumns;
+
+	uvmodel = glm::translate(uvmodel,
+	                         glm::vec3((float)frameX,
+	                                   (float)frameY,
+	                                   0.0f)
+	                         );
+
 
 	GLint sampler0UniformLocation   = glGetUniformLocation(shader->id, "sampler0");
 	GLint modelUniformLocation      = glGetUniformLocation(shader->id, "model");
@@ -263,6 +273,13 @@ void Sprite::Render(const shader_t * const shader, glm::mat4 *p, glm::mat4 *v) c
 	glUniformMatrix4fv(uvmodelUniformLocation, 1, GL_FALSE, (GLfloat*)&uvmodel[0]);
 
 	glDrawArrays(GL_TRIANGLES, 0, mesh->verticesSz);
+}
+
+
+void Sprite::Update() {
+	if(frameTimer.Stopwatch(frameMilliseconds)) {
+		StepFrame();
+	}
 }
 
 

@@ -15,7 +15,7 @@ class LD36Game : public IGame {
 public:
 	virtual void End();
 	virtual void Preload();
-	virtual void Update();
+	virtual void Update(const long elapsedMilliseconds);
 	virtual void Render();
 
 public:

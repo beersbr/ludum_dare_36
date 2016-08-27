@@ -26,17 +26,31 @@ void LD36Game::Preload() {
 	sprite = Sprite::CreateSprite("basic", mesh, texture,
 	                              8.0f, 8.0f,
 	                              50.0f, 50.0f,
-	                              3,
-	                              30);
+	                              6,
+	                              124);
 
 
-	sprite->scale    = glm::vec3(200.0f, 200.0f, 1.0f);
+	sprite->scale    = glm::vec3(50.0f, 50.0f, 1.0f);
 	sprite->position = glm::vec3(200.0f, 200.0f, 0.0f);
 
 }
 
 
-void LD36Game::Update() {
+void LD36Game::Update(const long elapsedMilliseconds) {
+	sprite->Update();
+
+	if(Keyboard::Instance()->KeyIsDown(SDLK_a)) {
+		sprite->position.x -= 100.0f * (elapsedMilliseconds/1000.0f);
+	}
+	if(Keyboard::Instance()->KeyIsDown(SDLK_d)) {
+		sprite->position.x += 100.0f * (elapsedMilliseconds/1000.0f);	
+	}
+	if(Keyboard::Instance()->KeyIsDown(SDLK_w)) {
+		sprite->position.y += 100.0f * (elapsedMilliseconds/1000.0f);
+	}
+	if(Keyboard::Instance()->KeyIsDown(SDLK_s)) {
+		sprite->position.y -= 100.0f * (elapsedMilliseconds/1000.0f);
+	}
 
 }
 

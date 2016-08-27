@@ -80,6 +80,11 @@ bool LD36Engine::IsValid() const {
 
 void LD36Engine::Update() {
 	static Timer timedUpdate;
+	static long lastTime    = 0;
+	static long currentTime = SDL_GetTicks();
+
+	lastTime = currentTime;
+	currentTime = SDL_GetTicks();
 
 	coreFrameCount += 1;
 	if(coreTimer.Stopwatch(999)) { 
@@ -87,13 +92,14 @@ void LD36Engine::Update() {
 		coreFrameCount = 0;
 	}
 
-	game->Update();
+	game->Update(currentTime - lastTime);
 
 	// NOTE(Brett):Gives about 60 fps
-	if(!timedUpdate.Stopwatch(14)) {
-		usleep(1);
-	}
-	else {
+	// if(!timedUpdate.Stopwatch(15)) {
+	// 	usleep(1);
+	// }
+	// else {
+	if(timedUpdate.Stopwatch(15)) {
 		realFrameCount += 1;
 		if(realTimer.Stopwatch(999)) {
 			realFrameRate = realFrameCount;
@@ -101,7 +107,6 @@ void LD36Engine::Update() {
 		}
 
 		game->Render();	
-
 		SDL_GL_SwapWindow(window);
 	}
 

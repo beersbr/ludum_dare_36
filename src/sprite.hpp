@@ -115,6 +115,7 @@ public:
 					const int total_frames, const int frame_anim_time );
 
 	void Render(const shader_t * const shader, glm::mat4 *p, glm::mat4 *v) const;
+	void Update();
 
 	void StepFrame();
 	void SetFrame(const int frame);
