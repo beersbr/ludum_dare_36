@@ -11,6 +11,8 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/ext.hpp>
 
+#include <unordered_map>
+
 #include "timer.hpp"
 
 #include "common.hpp"
@@ -31,12 +33,15 @@ public:
 	Texture();
 	~Texture();
 
-	void Load( const char * const filename, const int frame_columns, const int frame_rows );
+	static Texture* CreateTexture( const std::string name, const char * const filename);
+
+	void Load( const char * const filename );
 	void Use() const;
 
 public:
 	static long ids;
 	static GLuint currentRsId;
+	static std::unordered_map<std::string, Texture*> pool;
 
 	SDL_Surface* pixels;
 	glm::vec2    size;
@@ -44,7 +49,6 @@ public:
 	long         id;
 	bool         loaded;
 	int          currentTextureUnit;
-	std::string  name;
 };
 
 
@@ -55,7 +59,7 @@ public:
 
 class Mesh {
 public: 
-	static Mesh * const GetWithId(const int id);
+	static Mesh * CreateMesh(const std::string name, const vertex_t * const vertices, const int vertices_sz );
 
 	Mesh();
 	~Mesh();
@@ -72,9 +76,7 @@ public:
 	int verticesSz;
 
 private:
-	static Mesh** pool;
-	static int    poolSize;
-	static int    availableSize;
+	static std::unordered_map<std::string, Mesh*> pool;
 	static long   ids;
 	static long   currentId;
 

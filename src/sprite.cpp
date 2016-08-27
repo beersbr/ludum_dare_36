@@ -6,6 +6,16 @@
 
 long Texture::ids = 0;
 GLuint Texture::currentRsId = 0;
+std::unordered_map<std::string, Texture*> Texture::pool;
+
+Texture* Texture::CreateTexture(const std::string name, const char * const filename) {
+	Texture *texture = new Texture();
+	texture->Load(filename);
+
+	Texture::pool[name] = texture;
+	return texture;
+}
+
 
 Texture::Texture() {
 	pixels             = nullptr;
@@ -21,7 +31,7 @@ Texture::~Texture() {
 }
 
 
-void Texture::Load(const char * const filename, const int frame_columns, const int frame_rows) {
+void Texture::Load(const char * const filename) {
 	pixels = IMG_Load(filename);
 	if(!pixels) {
 		#ifdef DEBUG
@@ -67,18 +77,15 @@ void Texture::Use() const {
 
 long Mesh::ids          = 0;
 long Mesh::currentId    = 0;
-int Mesh::poolSize      = 0;
-int Mesh::availableSize = 0;
-Mesh** Mesh::pool       = nullptr;
+std::unordered_map<std::string, Mesh*> Mesh::pool;
 
-Mesh * const Mesh::GetWithId(const int id) {
 
-	if(Mesh::pool[id]) {
-		return Mesh::pool[id];	
-	} else {
-		return nullptr;
-	}
-	return nullptr;
+Mesh * Mesh::CreateMesh(const std::string name, const vertex_t * const vertices, const int vertices_sz ) {
+	Mesh* mesh = new Mesh();
+	mesh->Initialize(vertices, vertices_sz);
+
+	Mesh::pool[name] = mesh;
+	return mesh;
 }
 
 
@@ -137,21 +144,6 @@ void Mesh::Initialize(const vertex_t * const verts, const int vertices_sz) {
 
 	glBindVertexArray(0);
 
-	if(Mesh::poolSize >= Mesh::availableSize) { 
-
-		if(Mesh::poolSize == 0) {
-			Mesh::availableSize = 16;
-			Mesh::pool = (Mesh**)malloc(sizeof(Mesh*) * Mesh::availableSize);
-			memset(Mesh::pool, '0', sizeof(Mesh*) * Mesh::availableSize);
-		} else {
-			Mesh::availableSize = Mesh::availableSize * 2;
-			Mesh::pool = (Mesh**)realloc(Mesh::pool, sizeof(Mesh*) * Mesh::availableSize);
-			memset(Mesh::pool+(Mesh::availableSize/2), '0', (Mesh::availableSize/2)*sizeof(Mesh*));
-		}
-	}
-
-	Mesh::pool[Mesh::poolSize++] = this;
-
 	loaded = true;
 }
 
@@ -168,7 +160,7 @@ Sprite::Sprite() {
 
 
 void Sprite::Render() const {
-	
+
 }
 
 

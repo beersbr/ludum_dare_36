@@ -7,7 +7,7 @@ void LD36Game::End() {
 
 
 void LD36Game::Preload() {
-
+	Texture::CreateTexture("sheet1", "images/sheet1.png");
 }
 
 
