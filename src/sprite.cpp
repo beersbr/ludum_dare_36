@@ -47,13 +47,13 @@ void Texture::Load(const char * const filename) {
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexImage2D(GL_TEXTURE_2D,
-	             0,
-	             GL_RGBA,
-	             pixels->w, pixels->h, 
-	             0,
-	             GL_BGRA,
-	             GL_UNSIGNED_BYTE,
-	             pixels->pixels);
+				 0,
+				 GL_RGBA,
+				 pixels->w, pixels->h, 
+				 0,
+				 GL_BGRA,
+				 GL_UNSIGNED_BYTE,
+				 pixels->pixels);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -164,24 +164,24 @@ long Sprite::ids = 0;
 std::unordered_map<std::string, Sprite*> Sprite::pool;
 
 Sprite* Sprite::CreateSprite(const std::string name, 
-                             Mesh * const mesh,
-                             Texture * const texture,
-                             const int frame_columns,
-                             const int frame_rows,
-                             const int frame_width,
-                             const int frame_height,
-                             const int total_frames,
-                             const int frame_anim_time) {
+							 Mesh * const mesh,
+							 Texture * const texture,
+							 const int frame_columns,
+							 const int frame_rows,
+							 const int frame_width,
+							 const int frame_height,
+							 const int total_frames,
+							 const int frame_anim_time) {
 
 	Sprite *sprite = new Sprite();
 
 	sprite->Initialize(mesh, texture,
-	                   frame_columns,
-	                   frame_rows,
-	                   frame_width,
-	                   frame_height,
-	                   total_frames,
-	                   frame_anim_time);
+					   frame_columns,
+					   frame_rows,
+					   frame_width,
+					   frame_height,
+					   total_frames,
+					   frame_anim_time);
 
 	pool[name] = sprite;
 	sprite->name = name;
@@ -196,13 +196,13 @@ Sprite::Sprite() {
 
 
 void Sprite::Initialize(Mesh * const mesh,
-                        Texture * const texture,
-                        const int frame_columns,
-                        const int frame_rows,
-                        const int frame_width,
-                        const int frame_height,
-                        const int total_frames,
-                        const int frame_anim_time ) {
+						Texture * const texture,
+						const int frame_columns,
+						const int frame_rows,
+						const int frame_width,
+						const int frame_height,
+						const int total_frames,
+						const int frame_anim_time ) {
 
 	this->mesh    = mesh;
 	this->texture = texture;
