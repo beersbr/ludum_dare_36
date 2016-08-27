@@ -7,7 +7,7 @@ LD36Engine::LD36Engine() {
 }
 
 LD36Engine::~LD36Engine() {
-	
+
 }
 
 void LD36Engine::Initialize(const int window_width, const int window_height, const char * const title) {
@@ -74,3 +74,40 @@ void LD36Engine::Initialize(const int window_width, const int window_height, con
 bool LD36Engine::IsValid() const {
 	return valid;
 }
+
+
+void LD36Engine::Update() {
+	static Timer timedUpdate;
+
+	coreFrameCount += 1;
+	if(coreTimer.Stopwatch(999)) { 
+		coreFrameRate = coreFrameCount;
+		coreFrameCount = 0;
+	}
+
+	// NOTE(Brett):Gives about 60 fps
+	if(!timedUpdate.Stopwatch(14)) {
+		usleep(1);
+	}
+	else {
+		realFrameCount += 1;
+		if(realTimer.Stopwatch(999)) {
+			realFrameRate = realFrameCount;
+			realFrameCount = 0;
+		}
+
+		
+	}
+
+}
+
+
+bool LD36Engine::IsRunning() const {
+	return running;
+}
+
+
+void LD36Engine::Shutdown() {
+	running = false;
+}
+

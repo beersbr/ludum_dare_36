@@ -8,6 +8,9 @@
 #include "engine.hpp"
 #include "engine.cpp"
 
+#include "ld36game.hpp"
+#include "ld36game.cpp"
+
 #ifdef _WIN32
 #include <GL/glew.h>
 #endif
@@ -41,13 +44,7 @@ int main(int argc, char* argv[]) {
 	sprite.position = glm::vec3(25.0f, 25.0f, 0.0f);
 
 	SDL_Event event = {};
-	bool running = true;
-	long startTime = SDL_GetTicks();
-	long runningMilliseconds = 0;
-	long currentMilliseconds = 0;
-	long lastMilliseconds = 0;
-	long elapsedMilliseconds = 0;
-	long frames = 0;
+
 
 	glm::mat4 renderProjectionMatrix = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, 0.1f, 100.f);
 	glm::mat4 renderViewMatrix = glm::mat4();
@@ -55,12 +52,7 @@ int main(int argc, char* argv[]) {
 	float stepTimeSwap = 1/30.f;
 	float stepTime = stepTimeSwap;
 
-	while(running) {
-		long lastMilliseconds = currentMilliseconds;
-		currentMilliseconds = SDL_GetTicks();
-		elapsedMilliseconds = currentMilliseconds - lastMilliseconds;
-		float elapsedSeconds = elapsedMilliseconds/1000.0f;
-
+	while(Engine->IsRunning()) {
 		while(SDL_PollEvent(&event)) {
 				switch(event.type) {
 					case SDL_KEYDOWN:
@@ -79,7 +71,7 @@ int main(int argc, char* argv[]) {
 						switch(event.window.type) {
 							case SDL_WINDOWEVENT_CLOSE: 
 							{
-								running = false;
+								Engine->running = false;
 								break;
 							}
 						}
@@ -87,7 +79,7 @@ int main(int argc, char* argv[]) {
 					}
 					case SDL_QUIT:
 					{
-						running = false;
+						Engine->running = false;
 						break;
 					}
 				}
@@ -98,34 +90,33 @@ int main(int argc, char* argv[]) {
 
 		renderSprite(&renderProjectionMatrix, &renderViewMatrix, &sprite);
 
-		stepTime -= elapsedSeconds;
-		if(stepTime <= 0.0){
-			stepSpriteFrame(&sprite);
-			stepTime = stepTimeSwap - (stepTime - stepTimeSwap);
-		}
+		// stepTime -= elapsedSeconds;
+		// if(stepTime <= 0.0){
+		// 	stepSpriteFrame(&sprite);
+		// 	stepTime = stepTimeSwap - (stepTime - stepTimeSwap);
+		// }
 
 
-		if(Keyboard::Instance()->KeyIsDown(SDLK_UP)) {
-			// 
-			sprite.position.y += 100.f * elapsedSeconds;
-		}
-		if(Keyboard::Instance()->KeyIsDown(SDLK_DOWN)) {
-			sprite.position.y -= 100.f * elapsedSeconds;
-		}
-		if(Keyboard::Instance()->KeyIsDown(SDLK_LEFT)) {
-			sprite.position.x -= 100.f * elapsedSeconds;
-		}
-		if(Keyboard::Instance()->KeyIsDown(SDLK_RIGHT)) {
-			sprite.position.x += 100.f * elapsedSeconds;
-		}
+		// if(Keyboard::Instance()->KeyIsDown(SDLK_UP)) {
+		// 	// 
+		// 	sprite.position.y += 100.f * elapsedSeconds;
+		// }
+		// if(Keyboard::Instance()->KeyIsDown(SDLK_DOWN)) {
+		// 	sprite.position.y -= 100.f * elapsedSeconds;
+		// }
+		// if(Keyboard::Instance()->KeyIsDown(SDLK_LEFT)) {
+		// 	sprite.position.x -= 100.f * elapsedSeconds;
+		// }
+		// if(Keyboard::Instance()->KeyIsDown(SDLK_RIGHT)) {
+		// 	sprite.position.x += 100.f * elapsedSeconds;
+		// }
 
 
-
+		Engine->Update();
 
 
 		SDL_GL_SwapWindow(Engine->window);
 
-		frames += 1;
 		Keyboard::Instance()->ClearKeyPressedStates();
 	}
 

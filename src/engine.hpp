@@ -15,12 +15,16 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstddef>
+#include <unistd.h>
 
 #include <unordered_map>
 
 #ifdef _WIN32
 #include <GL/glew.h>
 #endif
+
+#include "igame.hpp"
+#include "igame.cpp"
 
 #include "timer.hpp"
 #include "timer.cpp"
@@ -32,20 +36,30 @@ public:
 
 	void Initialize(const int window_width, const int window_height, const char * const title);
 	bool IsValid() const;
-
+	bool IsRunning() const;
 
 	void Update();
-
+	void Shutdown();
 
 public:
-	int windowWidth;
-	int windowHeight;
-	SDL_Window *window;
+	int           windowWidth;
+	int           windowHeight;
+	SDL_Window *  window;
 	SDL_GLContext context;
 
 	bool valid;
 	bool running;
 	bool paused;
+
+	Timer coreTimer;
+	long  coreFrameCount;
+	long  coreFrameRate;
+
+	Timer realTimer;
+	long  realFrameCount;
+	long  realFrameRate;
+
+	IGame *game;
 };
 
 extern LD36Engine* Engine;
