@@ -163,6 +163,32 @@ long Sprite::ids = 0;
 
 std::unordered_map<std::string, Sprite*> Sprite::pool;
 
+Sprite* Sprite::CreateSprite(const std::string name, 
+                             Mesh * const mesh,
+                             Texture * const texture,
+                             const int frame_columns,
+                             const int frame_rows,
+                             const int frame_width,
+                             const int frame_height,
+                             const int total_frames,
+                             const int frame_anim_time) {
+
+	Sprite *sprite = new Sprite();
+
+	sprite->Initialize(mesh, texture,
+	                   frame_columns,
+	                   frame_rows,
+	                   frame_width,
+	                   frame_height,
+	                   total_frames,
+	                   frame_anim_time);
+
+	pool[name] = sprite;
+	sprite->name = name;
+	return sprite;
+}
+
+
 Sprite::Sprite() {
 	id = ++Sprite::ids;
 	valid = false;
