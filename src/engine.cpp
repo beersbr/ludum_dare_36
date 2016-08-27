@@ -85,6 +85,8 @@ void LD36Engine::Update() {
 		coreFrameCount = 0;
 	}
 
+	game->Update();
+
 	// NOTE(Brett):Gives about 60 fps
 	if(!timedUpdate.Stopwatch(14)) {
 		usleep(1);
@@ -96,7 +98,7 @@ void LD36Engine::Update() {
 			realFrameCount = 0;
 		}
 
-		
+		game->Render();		
 	}
 
 }

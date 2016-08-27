@@ -23,6 +23,8 @@ int main(int argc, char* argv[]) {
 	Engine = new LD36Engine();
 	Engine->Initialize(WINDOW_WIDTH, WINDOW_HEIGHT, EXE_NAME);
 
+	Engine->game = new LD36Game();
+
 	spriteSheet_t sheet1 = loadSpriteSheet("images/sheet1.png");
 
 	if(!sheet1.loaded) {
