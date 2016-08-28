@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include <unordered_map>
+#include <list>
 
 #ifdef _WIN32
 #include <GL/glew.h>
@@ -25,6 +26,7 @@
 
 #include "igame.hpp"
 #include "timer.hpp"
+#include "game_object.hpp"
 
 class LD36Engine {
 public:
@@ -55,6 +57,11 @@ public:
 	Timer realTimer;
 	long  realFrameCount;
 	long  realFrameRate;
+
+	std::list<GameObject*> objects;
+
+	glm::mat4 projectionMatrix;
+	glm::mat4 viewMatrix;
 
 	IGame *game;
 };

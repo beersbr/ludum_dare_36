@@ -109,12 +109,14 @@ public:
 								 const int frame_width, const int frame_height,
 								 const int total_frames, const int frame_anim_time);
 
+	static Sprite *GetSpriteByName(const std::string name);
+
 	void Initialize(Mesh * const mesh, Texture * const texture,
 					const int frame_columns, const int frame_rows,
 					const int frame_width, const int frame_height,
 					const int total_frames, const int frame_anim_time );
 
-	void Render(const shader_t * const shader, glm::mat4 *p, glm::mat4 *v) const;
+	void Render(glm::mat4 *p, glm::mat4 *v) const;
 	void Update();
 
 	void StepFrame();
@@ -148,6 +150,7 @@ public:
 	glm::mat4 uv;
 
 	std::string name;
+	shader_t shader;
 
 private:
 	static std::unordered_map<std::string, Sprite*> pool;

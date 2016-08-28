@@ -1,5 +1,7 @@
 #include "common.hpp"
 
+#define RANDOM(n) (rand()/(float)RAND_MAX * (n))
+
 char * const loadBinaryFile(const char * const filename) {
 	FILE *fp = fopen(filename, "rb+");
 	if(!fp) {

@@ -1,6 +1,8 @@
 #ifndef _LD_LD36GAME_
 #define _LD_LD36GAME_
 
+#include <unistd.h>
+
 #include "igame.hpp"
 
 #include "keyboard.hpp"
@@ -9,14 +11,14 @@
 // #include "sprite.cpp"
 
 #include "engine.hpp"
-#include "game_object.hpp"
-
+#include "player.hpp"
 
 class LD36Game : public IGame {
 public:
 	virtual void End();
 	virtual void Preload();
 	virtual void Update(const long elapsedMilliseconds);
+	virtual void EntityUpdate(const long elapsedMilliseconds);
 	virtual void Render();
 
 public:
@@ -24,7 +26,6 @@ public:
 	glm::mat4 viewMatrix;
 
 	shader_t shader;
-	Sprite *sprite;
 
 };
 

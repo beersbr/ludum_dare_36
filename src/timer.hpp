@@ -3,6 +3,16 @@
 
 #include <SDL2/SDL.h>
 
+#include <time.h>
+#include <iostream>
+
+#ifdef __APPLE__
+#include <CoreServices/CoreServices.h>
+#include <mach/mach.h>
+#include <mach/mach_time.h>
+#endif
+
+
 // NOTE(Brett):This is from advanced 2d gamedev THE BOOK!
 
 class Timer {
@@ -18,6 +28,10 @@ public:
 	void Sleep(const long milliseconds) const;
 	void Reset();
 	bool Stopwatch(const long milliseconds);
+
+private:
+	long GetTicks() const;
+
 };
 
 

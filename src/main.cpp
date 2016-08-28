@@ -60,8 +60,6 @@ int main(int argc, char* argv[]) {
 		}
 
 		Engine->Update();
-		// SDL_GL_SwapWindow(Engine->window);
-		Keyboard::Instance()->ClearKeyPressedStates();
 	}
 
 	return 0;

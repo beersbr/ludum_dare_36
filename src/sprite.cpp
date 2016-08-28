@@ -196,6 +196,11 @@ Sprite* Sprite::CreateSprite(const std::string name,
 }
 
 
+Sprite * Sprite::GetSpriteByName( const std::string name ) {
+	return pool[name];
+}
+
+
 Sprite::Sprite() {
 	id = ++Sprite::ids;
 	valid = false;
@@ -214,8 +219,8 @@ void Sprite::Initialize(Mesh * const mesh,
 	this->mesh    = mesh;
 	this->texture = texture;
 
-	frameWidth        = texture->width/(float)frame_columns;
-	frameHeight       = texture->height/(float)frame_rows; 
+	frameWidth        = frame_width;
+	frameHeight       = frame_height; 
 	frameColumns      = frame_columns;
 	frameRows         = frame_rows;
 	currentFrame      = 0;
@@ -232,9 +237,9 @@ void Sprite::Initialize(Mesh * const mesh,
 }
 
 
-void Sprite::Render(const shader_t * const shader, glm::mat4 *p, glm::mat4 *v) const {
+void Sprite::Render(glm::mat4 *p, glm::mat4 *v) const {
 	mesh->Use();
-	glUseProgram(shader->id);
+	glUseProgram(shader.id);
 
 	texture->Use();
 
@@ -259,11 +264,11 @@ void Sprite::Render(const shader_t * const shader, glm::mat4 *p, glm::mat4 *v) c
 	                         );
 
 
-	GLint sampler0UniformLocation   = glGetUniformLocation(shader->id, "sampler0");
-	GLint modelUniformLocation      = glGetUniformLocation(shader->id, "model");
-	GLint uvmodelUniformLocation    = glGetUniformLocation(shader->id, "uvmodel");
-	GLint projectionUniformLocation = glGetUniformLocation(shader->id, "projection");
-	GLint viewUniformLocation       = glGetUniformLocation(shader->id, "view");
+	GLint sampler0UniformLocation   = glGetUniformLocation(shader.id, "sampler0");
+	GLint modelUniformLocation      = glGetUniformLocation(shader.id, "model");
+	GLint uvmodelUniformLocation    = glGetUniformLocation(shader.id, "uvmodel");
+	GLint projectionUniformLocation = glGetUniformLocation(shader.id, "projection");
+	GLint viewUniformLocation       = glGetUniformLocation(shader.id, "view");
 
 	glUniformMatrix4fv(projectionUniformLocation, 1, GL_FALSE, (GLfloat*)p);
 	glUniformMatrix4fv(viewUniformLocation,       1, GL_FALSE, (GLfloat*)v);

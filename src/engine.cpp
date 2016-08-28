@@ -79,31 +79,51 @@ bool LD36Engine::IsValid() const {
 
 
 void LD36Engine::Update() {
+	static Timer entityTimedUpdate;
 	static Timer timedUpdate;
-	static long lastTime    = 0;
-	static long currentTime = SDL_GetTicks();
+	static long currentTime      = timedUpdate.GetTimer();
+	static long lastEntityUpdate = currentTime;
 
-	lastTime = currentTime;
-	currentTime = SDL_GetTicks();
+	currentTime = timedUpdate.GetTimer();
+
 
 	coreFrameCount += 1;
 	if(coreTimer.Stopwatch(999)) { 
 		coreFrameRate = coreFrameCount;
 		coreFrameCount = 0;
+		#ifdef DEBUG
+		std::cout << "core frame rate: " << coreFrameRate << std::endl;
+		#endif 
 	}
 
-	game->Update(currentTime - lastTime);
+	if(entityTimedUpdate.Stopwatch(1000/120.0f)) {
+		game->Update(currentTime - lastEntityUpdate);
+		game->EntityUpdate(currentTime - lastEntityUpdate);
+		lastEntityUpdate = currentTime;
+		Keyboard::Instance()->ClearKeyPressedStates();
+
+		std::list<GameObject *>::iterator iter = objects.begin();
+		while(iter != objects.end()) {
+			if((*iter)->alive == false) {
+				iter = objects.erase(iter);
+			}
+			else {
+				iter++;
+			}
+		}
+	}
 
 	// NOTE(Brett):Gives about 60 fps
-	// if(!timedUpdate.Stopwatch(15)) {
-	// 	usleep(1);
-	// }
-	// else {
-	if(timedUpdate.Stopwatch(15)) {
+	if(!timedUpdate.Stopwatch(1000/60.0f)) {
+		usleep(1);
+	}
+	else {
+	// if(timedUpdate.Stopwatch(15)) {
 		realFrameCount += 1;
 		if(realTimer.Stopwatch(999)) {
 			realFrameRate = realFrameCount;
 			realFrameCount = 0;
+			std::cout << "real frame rate: " << realFrameRate << std::endl;
 		}
 
 		game->Render();	
