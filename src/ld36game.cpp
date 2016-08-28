@@ -1,5 +1,5 @@
-#include "ld36game.hpp"
 
+#include "ld36game.hpp"
 void LD36Game::End() {
 
 }
@@ -38,6 +38,12 @@ void LD36Game::Preload() {
 	                     6,
 	                     250);
 
+	Sprite::CreateSprite("block", mesh, blockTexture,
+	                     1.0, 1.0,
+	                     50.0f, 50.0f,
+	                     1,
+	                     10000);
+
 
 	srand(SDL_GetTicks());
 	Player *player        = new Player();
@@ -46,29 +52,21 @@ void LD36Game::Preload() {
 	player->scale         = glm::vec3(120.0f, 60.0f, 1.0f);
 	player->position      = glm::vec3(500.0f, 500.0f, 0.0f);
 
-
 	Engine->objects.push_back(player);
 
-	// for(auto i = 0; i < 2000; i++) {
-	// 	GameObject *gameObject = new GameObject();
-	// 	gameObject->position = glm::vec3(RANDOM((float)Engine->windowWidth),
-	// 	                                 RANDOM((float)Engine->windowHeight),
-	// 	                                 0.0f);
 
-	// 	float scale = RANDOM(40.f) + 10.f;
-	// 	gameObject->scale = glm::vec3(scale, scale, 1.f);
+	for(auto i = 0; i < 24; i++) {
+		GameObject *block    = new GameObject();
+		block->sprite        = *Sprite::GetSpriteByName("block");
+		block->sprite.shader = shader;
+		block->scale         = glm::vec3(50.0f, 50.0f, 1.0f);
+		block->position      = glm::vec3(i * 50.0f +  25.0f, 25.0f, -0.5f);
+		block->objectName    = OBJECT_NAME_BLOCK;
+		block->objectType    = OBJECT_TYPE_SOLID;
 
-	// 	gameObject->sprite = *Sprite::GetSpriteByName("dash");
-	// 	gameObject->sprite.shader = shader;
-	// 	gameObject->sprite.frameMilliseconds = RANDOM(50) + 100;
+		Engine->objects.push_back(block);
+	}
 
-	// 	gameObject->velocity = glm::vec3(RANDOM(5.f) + -2.5f,
-	// 	                                 RANDOM(5.f) + -2.5f,
-	// 	                                 0.0f);
-
-
-	// 	Engine->objects.push_back(gameObject);
-	// }
 }
 
 
@@ -92,24 +90,48 @@ void LD36Game::EntityUpdate(const long elapsedMilliseconds) {
 			}
 			default:
 			{
-				(*iter)->position = (*iter)->position + (*iter)->velocity + glm::vec3(0.0f, (-500.0f * (float)elapsedSeconds), 0.0f);
+				if((*iter)->velocity.y != 0)
+					(*iter)->onGround = false;
+
+				glm::vec3 gravity = glm::vec3(0.0f, 0.0f, 0.0f);
+				if(!(*iter)->onGround)
+					gravity = glm::vec3(0.0f, (-500.0f * (float)elapsedSeconds), 0.0f);
+
+				(*iter)->position = (*iter)->position + (*iter)->velocity + gravity;
 
 				std::list<GameObject *>::iterator collisionIter = Engine->objects.begin();
 
 				rect_t currentEntityRect = (*iter)->GetRect();
 
 				while(collisionIter != Engine->objects.end()) {
-					rect_t targetEntityRect = (*collisionIter)->GetRect();
-					if(rectanglesCollide(currentEntityRect, targetEntityRect)) {
-						(*iter)->CollisionWith((*collisionIter));
-						(*collisionIter)->CollisionWith((*iter));
+					if(iter == collisionIter) {
+						collisionIter++;
+						continue;
 					}
 
-				}
-			}
-		}
+					rect_t targetEntityRect = (*collisionIter)->GetRect();
 
-	}
+					if(rectanglesCollide(currentEntityRect, targetEntityRect)) {
+						// std::cout << "collision!" << std::endl;
+
+						// std::cout << "target rect: " << targetEntityRect.x << ", " << targetEntityRect.y << ", " << targetEntityRect.width << ", " << targetEntityRect.height << std::endl;
+						// std::cout << "current rect: " << currentEntityRect.x << ", " << currentEntityRect.y << ", " << currentEntityRect.width << ", " << currentEntityRect.height << std::endl;
+
+
+						(*iter)->CollisionWith((*collisionIter));
+						(*collisionIter)->CollisionWith((*iter));
+					} //if
+
+					collisionIter++;
+
+				} //while
+
+			} // default
+
+		} //switch
+
+	} //for
+
 }
 
 

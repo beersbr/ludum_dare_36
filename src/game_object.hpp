@@ -34,6 +34,7 @@ public:
 
 	bool visible;
 	bool alive;
+	bool onGround;
 
 	Sprite sprite;
 	object_type_t objectType;
@@ -47,7 +48,6 @@ public:
 
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
-
 };
 
 

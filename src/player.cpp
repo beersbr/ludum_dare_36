@@ -77,6 +77,13 @@ void Player::CollisionWith(GameObject *collisionTarget) {
 		{
 			glm::vec3 v = SAT_AABBUncollisionVector(GetRect(), collisionTarget->GetRect());
 			position += v;
+			if(fabs(v.y) > fabs(v.x)) {
+				onGround = true;
+				velocity.y = 0.0f;
+			}
+			else {
+				velocity.x = 0.0f;
+			}
 			break;
 		}
 		default:
