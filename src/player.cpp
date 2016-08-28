@@ -1,6 +1,7 @@
 #include "player.hpp"
 
 Player::Player() : GameObject() {
+	shouldTakeDamage = true;
 }
 
 
@@ -20,8 +21,10 @@ void Player::Update(const long elapsedMilliseconds) {
 
 	acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	if(Keyboard::Instance()->KeyWasPressed(SDLK_w)) {
-		acceleration.y = 3300.f;
+	if(onGround) {
+		if(Keyboard::Instance()->KeyWasPressed(SDLK_w)) {
+			acceleration.y = 3300.f;
+		}
 	}
 
 	if(Keyboard::Instance()->KeyIsDown(SDLK_s)) {
@@ -39,22 +42,26 @@ void Player::Update(const long elapsedMilliseconds) {
 	if(!canDash) {
 		if(dashTimer.Stopwatch(200)) {
 			canDash = true;
+			shouldTakeDamage = true;
 		}
 	} else {
 		if(Keyboard::Instance()->KeyWasPressed(SDLK_j) && direction != 0) {
+			shouldTakeDamage = false;
 			acceleration.x = direction * 3300.f;
 			canDash = false;
 
-			GameObject *dash = new GameObject();
-			dash->lifeTimeLength = 160;
-			dash->sprite     = *Sprite::GetSpriteByName("dash");
-			dash->sprite.shader.id = 3;
+			GameObject *dash               = new GameObject();
+			dash->lifeTimeLength           = 160;
+			dash->sprite                   = *Sprite::GetSpriteByName("dash");
+			dash->sprite.shader.id         = 3;
 			dash->sprite.frameMilliseconds = dash->lifeTimeLength/4;
-			dash->scale      = glm::vec3(250.0f, 25.0f, 1.0f);
-			dash->position   = glm::vec3(this->position.x + 125.0f * direction,
-			                             this->position.y,
-			                             -1.0f);
+			dash->scale                    = glm::vec3(250.0f, 25.0f, 1.0f);
+			dash->position                 = glm::vec3(this->position.x + 125.0f * direction,
+			                                           this->position.y,
+			                                           -1.0f);
 			dash->objectType = OBJECT_TYPE_SOLID;
+			dash->objectName = OBJECT_NAME_DASH;
+
 
 			Engine->objects.push_back(dash);
 		}	
@@ -63,6 +70,9 @@ void Player::Update(const long elapsedMilliseconds) {
 	// std::cout << elapsedMilliseconds << std::endl;
 	velocity += acceleration * (elapsedMilliseconds/1000.0f);
 	velocity *= 0.9f;
+
+	sprite.direction = (velocity.x >= 0) ? SPRITE_DIRECTION_RIGHT : SPRITE_DIRECTION_LEFT;
+
 }
 
 
@@ -79,10 +89,10 @@ void Player::CollisionWith(GameObject *collisionTarget) {
 			position += v;
 			if(fabs(v.y) > fabs(v.x)) {
 				onGround = true;
-				velocity.y = 0.0f;
+				// velocity.y = 0.0f;
 			}
 			else {
-				velocity.x = 0.0f;
+				// velocity.x = 0.0f;
 			}
 			break;
 		}

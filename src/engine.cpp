@@ -1,5 +1,71 @@
 #include "engine.hpp"
 
+//*******************************************************************************************************************
+// CAMERA
+//*******************************************************************************************************************
+
+Camera::Camera() {
+	lookat = glm::vec3(0.0f, 0.0f, 0.0f);
+	target = nullptr;
+	drag = 0.15f;
+}
+
+
+Camera::~Camera() {
+	target = nullptr;
+}
+
+
+void Camera::FollowTarget() {
+	followTarget = true;
+}
+
+
+void Camera::IgnoreTarget() {
+	followTarget = false;
+}
+
+
+
+void Camera::SetLookat(const glm::vec3 lookat) {
+	this->lookat = lookat;
+}
+
+
+void Camera::SetTarget(GameObject * const object) {
+	target = object;
+}
+
+
+void Camera::Update() {
+	glm::vec3 targetOffset = glm::vec3(Engine->windowWidth/2.f,
+	                                   Engine->windowHeight/3.5f,
+	                                   0.0f);
+
+	glm::vec3 targetPosition = target->position;
+
+	targetPosition.x *= -1;
+	targetPosition.y *= -1;
+
+	glm::vec3 delta = (targetPosition - lookat) * drag;
+
+
+	lookat = lookat + delta ;
+
+	// lookat.x *= -1.0f;
+	// lookat.y *= -1.0f;
+
+	if(followTarget) { 
+		view = glm::mat4();
+		view = glm::translate(view, lookat + targetOffset);
+	}
+}
+
+//*******************************************************************************************************************
+// LD36Engine
+//*******************************************************************************************************************
+
+
 LD36Engine::LD36Engine() {
 	running = false;
 	valid   = false;

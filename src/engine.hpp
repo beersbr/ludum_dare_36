@@ -28,6 +28,29 @@
 #include "timer.hpp"
 #include "game_object.hpp"
 
+
+class Camera { 
+public:
+	Camera();
+	~Camera();
+
+	void FollowTarget(); 
+	void IgnoreTarget(); 
+	void SetLookat(const glm::vec3 lookat);
+	void SetTarget(GameObject * const object);
+	void Update();
+
+public:
+	float drag;
+	GameObject *target;
+	bool followTarget;
+	glm::vec3 lookat;
+	glm::mat4 view;
+
+};
+
+
+
 class LD36Engine {
 public:
 	LD36Engine();
@@ -64,6 +87,12 @@ public:
 	glm::mat4 viewMatrix;
 
 	IGame *game;
+
+	Camera camera;
+
+	GameObject *player;
+
+
 };
 
 extern LD36Engine* Engine;

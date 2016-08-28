@@ -42,10 +42,10 @@ void Texture::Load(const char * const filename) {
 
 	glGenTextures(1, &rsId);
 	glBindTexture(GL_TEXTURE_2D, rsId);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexImage2D(GL_TEXTURE_2D,
 				 0,
 				 GL_RGBA,
@@ -247,7 +247,9 @@ void Sprite::Render(glm::mat4 *p, glm::mat4 *v) const {
 	model           = glm::translate(model, position);
 	model           = glm::scale(model, scale);
 
+
 	glm::mat4 uvmodel = glm::mat4();
+	
 	uvmodel = glm::scale(uvmodel, 
 	                     glm::vec3(frameWidth/(float)texture->width,
 	                               frameHeight/(float)texture->height,
@@ -257,11 +259,14 @@ void Sprite::Render(glm::mat4 *p, glm::mat4 *v) const {
 	int frameX = currentFrame % frameColumns;
 	int frameY = currentFrame / frameColumns;
 
+	// NOTE(Brett):direction is there so we dont overflow the animation points
 	uvmodel = glm::translate(uvmodel,
-	                         glm::vec3((float)frameX,
+	                         glm::vec3((float)frameX  + 1 * direction,
 	                                   (float)frameY,
 	                                   0.0f)
 	                         );
+
+	uvmodel = glm::rotate(uvmodel, 3.14159f * direction, glm::vec3(0.0f, 1.0f, 0.0f));
 
 
 	GLint sampler0UniformLocation   = glGetUniformLocation(shader.id, "sampler0");
@@ -282,9 +287,12 @@ void Sprite::Render(glm::mat4 *p, glm::mat4 *v) const {
 
 
 void Sprite::Update() {
-	if(frameTimer.Stopwatch(frameMilliseconds)) {
-		StepFrame();
+	if(frameMilliseconds > 0) {
+		if(frameTimer.Stopwatch(frameMilliseconds)) {
+			StepFrame();
+		}	
 	}
+	
 }
 
 

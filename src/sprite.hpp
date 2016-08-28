@@ -92,9 +92,9 @@ private:
 //*******************************************************************************************************************
 
 enum sprite_direction_t {
-	SPRITE_NO_DIRECTION = 0,
+	SPRITE_DIRECTION_RIGHT = 0,
 	SPRITE_DIRECTION_LEFT,
-	SPRITE_DIRECTION_RIGHT,
+	SPRITE_NO_DIRECTION,
 	SPRITE_DIRECTION_COUNT
 };
 

@@ -12,6 +12,7 @@
 
 #include "engine.hpp"
 #include "player.hpp"
+#include "eye_guy_game_object.hpp"
 
 class LD36Game : public IGame {
 public:

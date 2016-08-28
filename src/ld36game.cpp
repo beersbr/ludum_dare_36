@@ -9,6 +9,8 @@ void LD36Game::Preload() {
 	Texture* walkingTexture = Texture::CreateTexture("walking", "images/walking.png");
 	Texture* dashTexture    = Texture::CreateTexture("dash", "images/dash.png");
 	Texture* blockTexture   = Texture::CreateTexture("block", "images/block.png");
+	Texture* eyeGuyTexture  = Texture::CreateTexture("eyeGuy", "images/eye_guy.png");
+	Texture* bootyTexture   = Texture::CreateTexture("booty", "images/booty.png");
 
 	vertex_t verts[6] = {
 		{ glm::vec3(-0.5f,  0.5f,  -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f) },
@@ -36,23 +38,39 @@ void LD36Game::Preload() {
 	                     6.0, 1.0,
 	                     60.0f, 120.0f,
 	                     6,
-	                     250);
+	                     225);
 
 	Sprite::CreateSprite("block", mesh, blockTexture,
 	                     1.0, 1.0,
 	                     50.0f, 50.0f,
 	                     1,
-	                     10000);
+	                     -1);
+
+	Sprite::CreateSprite("eyeGuy", mesh, eyeGuyTexture,
+	                     2.0, 1.0,
+	                     200.0f, 200.0f,
+	                     2,
+	                     -1);
+
+	Sprite::CreateSprite("booty", mesh, bootyTexture,
+	                     1.0, 1.0,
+	                     300.0f, 200.0f,
+	                     1,
+	                     -1);
 
 
 	srand(SDL_GetTicks());
 	Player *player        = new Player();
 	player->sprite        = *Sprite::GetSpriteByName("basic");
 	player->sprite.shader = shader;
-	player->scale         = glm::vec3(120.0f, 60.0f, 1.0f);
+	player->scale         = glm::vec3(40.0f, 70.0f, 1.0f);
 	player->position      = glm::vec3(500.0f, 500.0f, 0.0f);
+	player->objectName    = OBJECT_NAME_PLAYER;
 
 	Engine->objects.push_back(player);
+
+	Engine->camera.SetTarget(player);
+	Engine->camera.FollowTarget();
 
 
 	for(auto i = 0; i < 24; i++) {
@@ -66,6 +84,20 @@ void LD36Game::Preload() {
 
 		Engine->objects.push_back(block);
 	}
+
+
+	EyeGuyGameObject *enemy = new EyeGuyGameObject();
+	enemy->sprite           = *Sprite::GetSpriteByName("eyeGuy");
+	enemy->sprite.shader    = shader;
+	enemy->scale            = glm::vec3(150.0f, 100.0f, 1.0f);
+	enemy->position         = glm::vec3(320.0f, 320.0f, 0.0f);
+	enemy->objectName       = OBJECT_NAME_ENEMY_FLOAT;
+	enemy->objectType       = OBJECT_TYPE_PASSABLE;
+
+	Engine->objects.push_back(enemy);
+
+	Engine->player = player;
+
 
 }
 
@@ -94,7 +126,7 @@ void LD36Game::EntityUpdate(const long elapsedMilliseconds) {
 					(*iter)->onGround = false;
 
 				glm::vec3 gravity = glm::vec3(0.0f, 0.0f, 0.0f);
-				if(!(*iter)->onGround)
+				if((*iter)->objectName != OBJECT_NAME_ENEMY_FLOAT)
 					gravity = glm::vec3(0.0f, (-500.0f * (float)elapsedSeconds), 0.0f);
 
 				(*iter)->position = (*iter)->position + (*iter)->velocity + gravity;
@@ -123,7 +155,6 @@ void LD36Game::EntityUpdate(const long elapsedMilliseconds) {
 					} //if
 
 					collisionIter++;
-
 				} //while
 
 			} // default
@@ -138,6 +169,9 @@ void LD36Game::EntityUpdate(const long elapsedMilliseconds) {
 void LD36Game::Render() {
 	glClearColor(0.1f, 0.5f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	Engine->camera.Update();
+	Engine->viewMatrix = Engine->camera.view;
 
 	std::list<GameObject *>::iterator iter;
 	for(iter = Engine->objects.begin(); iter != Engine->objects.end(); iter++) {
