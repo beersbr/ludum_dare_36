@@ -20,8 +20,8 @@ void Player::Update(const long elapsedMilliseconds) {
 
 	acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	if(Keyboard::Instance()->KeyIsDown(SDLK_w)) {
-		acceleration.y = 75.f;
+	if(Keyboard::Instance()->KeyWasPressed(SDLK_w)) {
+		acceleration.y = 3300.f;
 	}
 
 	if(Keyboard::Instance()->KeyIsDown(SDLK_s)) {
@@ -68,4 +68,20 @@ void Player::Update(const long elapsedMilliseconds) {
 
 void Player::Render(glm::mat4 *p, glm::mat4 *v) {
 		GameObject::Render(p, v);
+}
+
+
+void Player::CollisionWith(GameObject *collisionTarget) { 
+	switch(collisionTarget->objectName) {
+		case OBJECT_NAME_BLOCK:
+		{
+			glm::vec3 v = SAT_AABBUncollisionVector(GetRect(), collisionTarget->GetRect());
+			position += v;
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
 }

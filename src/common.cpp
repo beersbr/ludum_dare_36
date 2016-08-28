@@ -1,6 +1,44 @@
 #include "common.hpp"
 
-#define RANDOM(n) (rand()/(float)RAND_MAX * (n))
+bool const rectanglesCollide( const rect_t a, const rect_t b) {
+	if(a.x > b.x + b.width) return false;
+	if(a.x + a.width < b.x) return false;
+	if(a.y > b.y + b.height) return false;
+	if(a.y + a.height > b.y) return false;
+	return true;
+}
+
+
+glm::vec3 SAT_AABBUncollisionVector(const rect_t subject, const rect_t passive ) {
+	float xA = subject.x,
+		  xB = subject.x + subject.width,
+		  xC = passive.x,
+		  xD = passive.x + passive.width;
+		  
+	float yA = subject.y,
+		  yB = subject.y + subject.height,
+		  yC = passive.y,
+		  yD = passive.y + passive.height;
+
+    glm::vec2 subjectCenter = glm::vec2(subject.x + subject.width/2.f, 
+                              		    subject.y + subject.height/2.f);
+
+    glm::vec2 passiveCenter = glm::vec2(passive.x + passive.width/2.f, 
+                              		    passive.y + passive.height/2.f);
+
+	float xAxisLength = fmin(xB, xD) - fmax(xA, xC);
+	float yAxisLength = fmin(yB, yD) - fmax(yA, yC);
+
+	if(xAxisLength < yAxisLength) { 
+		float delta = subjectCenter.x - passiveCenter.x;
+		return glm::vec3(xAxisLength * (delta/fabs(delta)), 0.0f, 0.0f);
+	} else {
+		float delta = subjectCenter.y - passiveCenter.y;
+		return glm::vec3(0.0f, yAxisLength * (delta/fabs(delta)) , 0.0f);
+	}
+
+}
+
 
 char * const loadBinaryFile(const char * const filename) {
 	FILE *fp = fopen(filename, "rb+");

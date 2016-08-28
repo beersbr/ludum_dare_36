@@ -8,6 +8,7 @@ void LD36Game::Preload() {
 	Texture* texture        = Texture::CreateTexture("sheet1", "images/sheet1.png");
 	Texture* walkingTexture = Texture::CreateTexture("walking", "images/walking.png");
 	Texture* dashTexture    = Texture::CreateTexture("dash", "images/dash.png");
+	Texture* blockTexture   = Texture::CreateTexture("block", "images/block.png");
 
 	vertex_t verts[6] = {
 		{ glm::vec3(-0.5f,  0.5f,  -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f) },
@@ -37,8 +38,8 @@ void LD36Game::Preload() {
 	                     6,
 	                     250);
 
-	srand(SDL_GetTicks());
 
+	srand(SDL_GetTicks());
 	Player *player        = new Player();
 	player->sprite        = *Sprite::GetSpriteByName("basic");
 	player->sprite.shader = shader;
@@ -92,6 +93,19 @@ void LD36Game::EntityUpdate(const long elapsedMilliseconds) {
 			default:
 			{
 				(*iter)->position = (*iter)->position + (*iter)->velocity + glm::vec3(0.0f, (-500.0f * (float)elapsedSeconds), 0.0f);
+
+				std::list<GameObject *>::iterator collisionIter = Engine->objects.begin();
+
+				rect_t currentEntityRect = (*iter)->GetRect();
+
+				while(collisionIter != Engine->objects.end()) {
+					rect_t targetEntityRect = (*collisionIter)->GetRect();
+					if(rectanglesCollide(currentEntityRect, targetEntityRect)) {
+						(*iter)->CollisionWith((*collisionIter));
+						(*collisionIter)->CollisionWith((*iter));
+					}
+
+				}
 			}
 		}
 

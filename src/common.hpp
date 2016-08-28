@@ -24,6 +24,8 @@
 
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 800
+
+#define RANDOM(n) (rand()/(float)RAND_MAX * (n))
  
 struct shader_t {
 	GLuint id;
@@ -37,9 +39,21 @@ struct vertex_t {
 	glm::vec2 uv;
 };
 
+
+struct rect_t {
+	float x;
+	float y;
+	float width;
+	float height;
+};
+
 //*******************************************************************************************************************
 // FUNCTIONS
 //*******************************************************************************************************************
+
+bool const rectanglesCollide( const rect_t a, const rect_t b );
+
+glm::vec3 SAT_AABBUncollisionVector(const rect_t subject, const rect_t passive );
 
 char * const loadBinaryFile( const char * const filename );
 

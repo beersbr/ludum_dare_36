@@ -14,6 +14,7 @@ public:
 
 	virtual void Update(const long elapsedMilliseconds);
 	virtual void Render(glm::mat4 *p, glm::mat4 *v);
+	virtual void CollisionWith(GameObject *collisionTarget);
 };
 
 #endif

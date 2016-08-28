@@ -32,12 +32,12 @@ int main(int argc, char* argv[]) {
 					case SDL_KEYDOWN:
 					{
 						Keyboard::Instance()->Keydown(event.key.keysym.sym);
+						Keyboard::Instance()->SetKeyPressed(event.key.keysym.sym);
 						break;
 					}
 					case SDL_KEYUP:
 					{
 						Keyboard::Instance()->Keyup(event.key.keysym.sym);
-						Keyboard::Instance()->SetKeyPressed(event.key.keysym.sym);
 						break;
 					}
 					case SDL_WINDOWEVENT:
