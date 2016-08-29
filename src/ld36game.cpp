@@ -89,7 +89,7 @@ void LD36Game::Preload() {
 	EyeGuyGameObject *enemy = new EyeGuyGameObject();
 	enemy->sprite           = *Sprite::GetSpriteByName("eyeGuy");
 	enemy->sprite.shader    = shader;
-	enemy->scale            = glm::vec3(150.0f, 100.0f, 1.0f);
+	enemy->scale            = glm::vec3(150.0f, 150.0f, 1.0f);
 	enemy->position         = glm::vec3(320.0f, 320.0f, 0.0f);
 	enemy->objectName       = OBJECT_NAME_ENEMY_FLOAT;
 	enemy->objectType       = OBJECT_TYPE_PASSABLE;

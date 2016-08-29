@@ -15,6 +15,16 @@ void Player::Update(const long elapsedMilliseconds) {
 	static Timer dashTimer;
 	static bool canDash = true;
 
+	static Timer onGroundTimer;
+
+	if(!onGround){
+		if(onGroundTimer.Stopwatch(1500)) {
+			position = glm::vec3(500.0f, 500.0f, 0.0f);	
+		}
+	} else {
+		onGroundTimer.Reset();
+	}
+
 	sprite.Update();
 
 	int direction = 0;
@@ -40,7 +50,7 @@ void Player::Update(const long elapsedMilliseconds) {
 	}
 
 	if(!canDash) {
-		if(dashTimer.Stopwatch(200)) {
+		if(dashTimer.Stopwatch(250)) {
 			canDash = true;
 			shouldTakeDamage = true;
 		}
@@ -93,6 +103,14 @@ void Player::CollisionWith(GameObject *collisionTarget) {
 			}
 			else {
 				// velocity.x = 0.0f;
+			}
+			break;
+		}
+		case OBJECT_NAME_ENEMY_FLOAT:
+		{
+			std::cout << "SHould take damage: " << shouldTakeDamage << std::endl;
+			if(shouldTakeDamage){
+				position = glm::vec3(500.0f, 500.0f, 0.0f);	
 			}
 			break;
 		}

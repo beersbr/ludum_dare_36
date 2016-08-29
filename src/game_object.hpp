@@ -38,6 +38,9 @@ public:
 	bool visible;
 	bool alive;
 	bool onGround;
+	bool dying;
+
+	Timer dyingTimer;
 
 	Sprite sprite;
 	object_type_t objectType;
