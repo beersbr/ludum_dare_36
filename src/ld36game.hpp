@@ -23,6 +23,9 @@ public:
 	virtual void Render();
 
 public:
+
+	void SpawnMonster() const;
+
 	glm::mat4 projectionMatrix;
 	glm::mat4 viewMatrix;
 

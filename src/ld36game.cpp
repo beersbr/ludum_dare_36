@@ -179,3 +179,11 @@ void LD36Game::Render() {
 	}
 }
 
+
+
+void LD36Game::SpawnMonster() const {
+	
+}
+
+
+
