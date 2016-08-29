@@ -11,6 +11,8 @@ void LD36Game::Preload() {
 	Texture* blockTexture   = Texture::CreateTexture("block", "images/block.png");
 	Texture* eyeGuyTexture  = Texture::CreateTexture("eyeGuy", "images/eye_guy.png");
 	Texture* bootyTexture   = Texture::CreateTexture("booty", "images/booty.png");
+	Texture* chestTexture   = Texture::CreateTexture("chest", "images/chest.png");
+
 
 	vertex_t verts[6] = {
 		{ glm::vec3(-0.5f,  0.5f,  -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f) },
@@ -33,6 +35,12 @@ void LD36Game::Preload() {
 	                     200.0f, 50.0f,
 	                     4,
 	                     20);
+
+	Sprite::CreateSprite("chest", mesh, chestTexture,
+	                     2.0f, 1.0f,
+	                     200.0f, 100.0f,
+	                     2,
+	                     120);
 
 	Sprite::CreateSprite("basic", mesh, walkingTexture,
 	                     6.0, 1.0,
@@ -180,10 +188,6 @@ void LD36Game::Render() {
 }
 
 
-
 void LD36Game::SpawnMonster() const {
-	
+
 }
-
-
-
