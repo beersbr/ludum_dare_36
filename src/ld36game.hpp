@@ -1,7 +1,9 @@
 #ifndef _LD_LD36GAME_
 #define _LD_LD36GAME_
 
+#ifdef __APPLE__
 #include <unistd.h>
+#endif 
 
 #include "igame.hpp"
 

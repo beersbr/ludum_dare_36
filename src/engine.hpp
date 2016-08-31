@@ -2,10 +2,24 @@
 #define _LD_ENGINE_
 
 #include <SDL2/SDL.h>
+
+#ifdef __APPLE__
 #include <SDL2_Image/SDL_Image.h>
-// #include <SDL2/SDL_opengl.h>
 #include <Opengl/Opengl.h>
 #include <Opengl/gl3.h>
+#include <unistd.h>
+
+#endif
+
+
+#ifdef _WIN32
+#include <SDL2/SDL_Image.h>
+#include <SDL2/SDL_Image.h>
+#include <GL/glew.h>
+#include <gl/gl.h>
+#include <math.h>
+#endif
+
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -15,7 +29,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstddef>
-#include <unistd.h>
+
 
 #include <unordered_map>
 #include <list>

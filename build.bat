@@ -1,14 +1,16 @@
 @echo off
 
-rem get myself a shell
-call "D:\Program Files (x86)\Microsoft Visual Studio 11.0\VC/vcvarsall" x64
 
-mkdir ..\build
-pushd ..\build
+rem call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC/vcvarsall" x64
+
+set EXE_NAME=ludum_dare_36
+
+mkdir bin
+pushd bin
 
 rem -Zi -- generate debug info
 rem -FC -- use full paths
 
-cl -FC -Zi ..\code\win32_handmade.cpp User32.lib Gdi32.lib
-
+cl -FC -Zi ../src/main.cpp /Iinclude/ lib /D DEBUG /D EXE_NAME=%EXE_NAME%  math.lib opengl32.lib SDL2.lib SDL2main.lib glew32.lib /out:%EXE_NAME%.exe
+ 
 popd
