@@ -12,6 +12,7 @@
 
 #ifdef _WIN32
 #include <GL/glew.h>
+
 #endif
 
 LD36Engine* Engine;

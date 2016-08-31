@@ -136,7 +136,9 @@ shader_t loadShader(const char * const vertex_name, const char * const fragment_
 		#endif
 	}
 
-	shader_t shader = { .id = shaderId };
+	// shader_t shader = { .id = shaderId };
+	shader_t shader = {};
+	shader.id = shaderId;
 	strncpy(shader.name, name, RESOURCE_NAME_SZ-1);
 
 	return shader;
