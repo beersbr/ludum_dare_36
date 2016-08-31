@@ -50,7 +50,7 @@ void Player::Update(const long elapsedMilliseconds) {
 	}
 
 	if(!canDash) {
-		if(dashTimer.Stopwatch(400)) {
+		if(dashTimer.Stopwatch(600)) {
 			canDash = true;
 			shouldTakeDamage = true;
 		}

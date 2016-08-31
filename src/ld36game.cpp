@@ -111,7 +111,7 @@ void LD36Game::Preload() {
 
 
 void LD36Game::Update(const long elapsedMilliseconds) {
-
+	SpawnMonster();
 }
 
 
@@ -189,5 +189,20 @@ void LD36Game::Render() {
 
 
 void LD36Game::SpawnMonster() const {
+	static Timer monsterSpawnTimer;
+	static int monsterSpawnTimout = 8000;
+
+
+	if(monsterSpawnTimer.Stopwatch(monsterSpawnTimout)) {
+		EyeGuyGameObject *enemy = new EyeGuyGameObject();
+		enemy->sprite           = *Sprite::GetSpriteByName("eyeGuy");
+		enemy->sprite.shader    = shader;
+		enemy->scale            = glm::vec3(150.0f, 150.0f, 1.0f);
+		enemy->position         = glm::vec3(320.0f, 320.0f, 0.0f);
+		enemy->objectName       = OBJECT_NAME_ENEMY_FLOAT;
+		enemy->objectType       = OBJECT_TYPE_PASSABLE;
+
+		Engine->objects.push_back(enemy);
+	}
 
 }

@@ -29,9 +29,6 @@ public:
 	glm::mat4 projectionMatrix;
 	glm::mat4 viewMatrix;
 
-	Timer monsterSpawnTimer;
-	int monsterSpawnTimout;
-
 	shader_t shader;
 
 };
